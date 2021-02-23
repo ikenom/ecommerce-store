@@ -1,0 +1,76 @@
+version: "3.7"
+
+x-default-app: &default-app
+  RELEASE_NAME: local
+  LOCAL_MONGODB_SERVICE_HOST: mongo
+  LOCAL_MONGODB_SERVICE_PORT: 27017
+  LOCAL_RABBITMQ_SERVICE_HOST: rabbitmq
+  LOCAL_RABBITMQ_SERVICE_PORT_AMQP: 5672
+  LOCAL_RABBITMQ_SERVICE_PORT_HTTP_STATS: 15672
+  RABBITMQ_USERNAME: user
+  RABBITMQ_PASSWORD: bitnami
+
+x-default-volumes: &default-volumes
+  - .:/app
+  - tmp:/app/tmp
+  - bundle:/app/vendor/bundle
+
+networks:
+  network:
+    driver: bridge
+
+services:
+  app:
+    environment:
+      <<: *default-app
+    volumes: *default-volumes
+    image: $IMAGE_NAME:$IMAGE_TAG
+    networks:
+      - network
+    ports:
+      - "4000:3000"
+    depends_on:
+      - mongo
+
+  hutch:
+    restart: always
+    environment:
+      <<: *default-app
+    volumes: *default-volumes
+    image: $IMAGE_NAME:$IMAGE_TAG
+    networks:
+      - network
+    command: bundle exec hutch
+    depends_on:
+      - rabbitmq
+
+  sneakers:
+    restart: always
+    environment:
+      <<: *default-app
+    volumes: *default-volumes
+    image: $IMAGE_NAME:$IMAGE_TAG
+    networks:
+      - network
+    command: bin/rake sneakers:run
+    depends_on:
+      - rabbitmq
+
+  mongo:
+    image: mongo:4.2.5
+    restart: always
+    ports:
+      - "5001:27017"
+    networks:
+      - network
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    ports:
+      - "5002:15672"
+    networks:
+      - network
+
+volumes:
+  tmp:
+  bundle:

@@ -1,0 +1,38 @@
+inherit_gem:
+  rubocop-github:
+    - config/default_edge.yml
+    - config/rails_edge.yml
+
+require: rubocop-rails
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Style/Documentation:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false
+Style/MultilineIfModifier:
+  Enabled: false
+Rails/Delegate:
+  Enabled: false
+Rails/TimeZone:
+  Enabled: false
+Performance/Detect:
+  Enabled: false
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+Style/NumericLiterals:
+  Enabled: false
+Style/RedundantSelf:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false

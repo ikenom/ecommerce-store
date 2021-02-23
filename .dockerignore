@@ -1,0 +1,10 @@
+chart/
+
+.bundle
+.circleci
+.git
+vendor/*
+log/*
+!/log/.keep
+tmp/*
+!/tmp/.keep

@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+build:
+  artifacts:
+  - image: ghcr.io/ikenom/user-service
+    sync:
+        infer:
+        - 'app/**/*.rb'
+
+deploy:
+  helm:
+    releases:
+    - name: user-service
+      artifactOverrides:
+        image: ghcr.io/ikenom/user-service
+      chartPath: chart
+      skipBuildDependencies: false
+      valuesFiles:
+        - ./chart/values.yaml
+      imageStrategy:
+        helm: {}
+      createNamespace: true
